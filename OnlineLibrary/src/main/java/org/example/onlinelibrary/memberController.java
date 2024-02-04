@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,10 +14,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import org.w3c.dom.events.MouseEvent;
 
 import java.io.IOException;
-import java.lang.reflect.Member;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,7 +37,7 @@ private TableView<members>tbl_Member;
 
 
 @FXML
-private TableColumn<members, Integer> colID;
+private TableColumn<books, Integer> colID;
     @FXML
 
     private TableColumn<members,String> colName;
@@ -65,7 +62,7 @@ private TableColumn<members, Integer> colID;
 
     private TextField txt_AddMemberName;
     @FXML
-    private boolean chektable=false;
+    public static int chektable1;
     @FXML
 
     private TextField txt_AddMemberPassword;
@@ -86,12 +83,14 @@ private TableColumn<members, Integer> colID;
     @FXML
     private  int id;
 
-
+public static int addmem;
 
 
     @Override
     public  void initialize(URL url, ResourceBundle resourceBundle){
+    if (chektable1==2){
         showMembers();
+    }
 
     }
   @FXML
@@ -150,6 +149,7 @@ void createMember(ActionEvent event){
 
 @FXML
 void deleteMember(ActionEvent event){
+
         String delete="delete from members where id=?";
         con=DBcon.getCon();
         try {
@@ -167,12 +167,18 @@ void deleteMember(ActionEvent event){
 
 
 }
+    @FXML
+    private TableView tbl_reservdBooks;
+
+
+
+
 
 @FXML
     public void showMembers(){
-    if (chektable){ObservableList<members>list=getMembers();
+    if (chektable1==2){ObservableList<members>list=getMembers();
         tbl_Member.setItems(list);
-        colID.setCellValueFactory(new PropertyValueFactory<members,Integer>("id"));
+        colID.setCellValueFactory(new PropertyValueFactory<books, Integer>("id"));
         colName.setCellValueFactory((new  PropertyValueFactory<members,String>("name")));
         colFamily.setCellValueFactory((new  PropertyValueFactory<members,String>("family")));
         colTell.setCellValueFactory((new  PropertyValueFactory<members,String>("tell")));
@@ -194,5 +200,107 @@ void deleteMember(ActionEvent event){
 
     @FXML
     private Stage currentStage;
+
+@FXML
+   private Button btn_retutnDeleteMember;
+    @FXML
+    private void ReturnAdminPage() {
+        try {
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org.example.onlinelibrary/AdminPage.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage newStage = new Stage();
+            newStage.setTitle("Admin page");
+            newStage.setScene(new Scene(root, 800, 700));
+            Stage currentStage = (Stage) btn_retutnDeleteMember.getScene().getWindow();
+
+            currentStage.close(); // Close the current stage
+
+            newStage.show(); // Show the new stage
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private Button btn_myBooks;
+
+    @FXML
+    private Button btn_rentBook;
+@FXML
+
+    private void GoToMyBook() {
+        bookController.chek=1;
+        try {
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org.example.onlinelibrary/myBook.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage newStage = new Stage();
+            newStage.setTitle("My books");
+            newStage.setScene(new Scene(root, 800, 550));
+            Stage currentStage = (Stage) btn_myBooks.getScene().getWindow();
+
+            currentStage.close(); // Close the current stage
+
+            newStage.show(); // Show the new stage
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private Button btn_retuenMemberPage;
+
+
+@FXML
+
+    private void GoToRentBook() {
+    bookController.chek=0;
+
+    try {
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org.example.onlinelibrary/lendBook.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage newStage = new Stage();
+            newStage.setTitle("Lending Book");
+            newStage.setScene(new Scene(root, 800, 700));
+            Stage currentStage = (Stage) btn_rentBook.getScene().getWindow();
+
+            currentStage.close(); // Close the current stage
+
+            newStage.show(); // Show the new stage
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+@FXML
+private Button Btn_Exit;
+
+    @FXML
+
+    private void Exit() {
+        try {
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org.example.onlinelibrary/login page.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage newStage = new Stage();
+            newStage.setTitle("Login page");
+            newStage.setScene(new Scene(root, 800, 700));
+            Stage currentStage = (Stage) btn_Exit.getScene().getWindow();
+
+            currentStage.close(); // Close the current stage
+
+            newStage.show(); // Show the new stage
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
